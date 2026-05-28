@@ -1,0 +1,104 @@
+export default function CustomerTable({
+  customers
+}) {
+
+  return (
+
+    <div className="
+      bg-white
+      rounded-2xl
+      shadow-lg
+      overflow-hidden
+    ">
+
+      <table className="
+        w-full
+      ">
+
+        {/* TABLE HEADER */}
+        <thead className="
+          bg-gray-100
+        ">
+
+          <tr>
+
+            <th className="p-4 text-left">
+              Name
+            </th>
+
+            <th className="p-4 text-left">
+              Email
+            </th>
+
+            <th className="p-4 text-left">
+              Phone
+            </th>
+
+            <th className="p-4 text-left">
+              Status
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        {/* TABLE BODY */}
+        <tbody>
+
+          {customers.map((customer) => (
+
+            <tr
+
+              key={customer.id}
+
+              className="
+                border-t
+                hover:bg-gray-50
+                transition
+              "
+            >
+
+              <td className="p-4">
+
+                {customer.first_name}
+                {" "}
+                {customer.last_name}
+
+              </td>
+
+              <td className="p-4">
+                {customer.email}
+              </td>
+
+              <td className="p-4">
+                {customer.phone}
+              </td>
+
+              <td className="p-4">
+
+                <span className="
+                  px-3
+                  py-1
+                  rounded-full
+                  text-sm
+                  bg-blue-100
+                  text-blue-700
+                ">
+
+                  {customer.status}
+
+                </span>
+
+              </td>
+
+            </tr>
+          ))}
+
+        </tbody>
+
+      </table>
+
+    </div>
+  );
+}

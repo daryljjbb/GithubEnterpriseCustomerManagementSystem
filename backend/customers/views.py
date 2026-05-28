@@ -1,3 +1,43 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from rest_framework.permissions import (
+    IsAuthenticated
+)
+
+from .models import Customer
+
+from .serializers import (
+    CustomerSerializer
+)
+
+
+class CustomerViewSet(
+    viewsets.ModelViewSet
+):
+
+    queryset = Customer.objects.all(
+
+    ).order_by("-created_at")
+
+
+    serializer_class = (
+        CustomerSerializer
+    )
+
+    permission_classes = [
+        IsAuthenticated
+    ]
+
+
+    # -----------------------------------
+    # AUTO SET created_by
+    # -----------------------------------
+    def perform_create(
+        self,
+        serializer
+    ):
+
+        serializer.save(
+
+            created_by=self.request.user
+        )

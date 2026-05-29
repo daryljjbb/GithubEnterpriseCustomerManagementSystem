@@ -33,6 +33,9 @@ class AuditLog(models.Model):
 
     EVENT_CHOICES = (
 
+        # -----------------------------------
+        # AUTHENTICATION EVENTS
+        # -----------------------------------
         ("login_success", "Login Success"),
 
         ("login_failed", "Login Failed"),
@@ -44,6 +47,30 @@ class AuditLog(models.Model):
         ("account_locked", "Account Locked"),
 
         ("unauthorized_access", "Unauthorized Access"),
+
+
+        # -----------------------------------
+        # CUSTOMER EVENTS
+        # -----------------------------------
+        ("customer_created", "Customer Created"),
+
+        ("customer_updated", "Customer Updated"),
+
+        ("customer_deleted", "Customer Deleted"),
+
+
+        # -----------------------------------
+        # SESSION EVENTS
+        # -----------------------------------
+        ("session_expired", "Session Expired"),
+
+        ("idle_timeout", "Idle Timeout"),
+
+
+        # -----------------------------------
+        # SYSTEM EVENTS
+        # -----------------------------------
+        ("system_error", "System Error"),
     )
 
     user = models.ForeignKey(

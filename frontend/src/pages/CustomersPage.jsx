@@ -1,33 +1,92 @@
+import { useNavigate } from "react-router-dom";
+
 import { motion } from "framer-motion";
 
 import DashboardLayout
 from "../components/layout/DashboardLayout";
 
-import useCustomers
-from "../hooks/useCustomers";
-
 import CustomerTable
 from "../components/customers/CustomerTable";
 
-import { Link }
-from "react-router-dom";
+import useCustomers
+from "../hooks/useCustomers";
+
+import { deleteCustomer }
+from "../services/customerService";
+
+import CustomerDeleteModal
+from "../components/customers/CustomerDeleteModal";
+
+import toast from "react-hot-toast";
+
+import { useState } from "react";
 
 
 export default function CustomersPage() {
 
+  const navigate = useNavigate();
+
+
+  // -----------------------------------
+  // CUSTOMER HOOK
+  // -----------------------------------
   const {
 
     customers,
 
     loading,
 
+    error,
+
+    search,
+
+    setSearch,
+
+    status,
+
+    setStatus,
+
+    fetchCustomers,
+
   } = useCustomers();
 
+  const [selectedCustomer,
+  setSelectedCustomer] =
+    useState(null);
+
+
+   const handleDeleteCustomer =
+  async (customer) => {
+
+    try {
+
+      await deleteCustomer(
+        customer.id
+      );
+
+      toast.success(
+        "Customer deleted"
+      );
+
+      fetchCustomers();
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error(
+        "Failed to delete customer"
+      );
+    }
+};
+
+  
+ 
 
   // -----------------------------------
-  // LOADING STATE
+  // ERROR STATE
   // -----------------------------------
-  if (loading) {
+  if (error) {
 
     return (
 
@@ -40,8 +99,9 @@ export default function CustomersPage() {
           <h1 className="
             text-2xl
             font-bold
+            text-red-600
           ">
-            Loading customers...
+            Failed to load customers
           </h1>
 
         </div>
@@ -66,47 +126,198 @@ export default function CustomersPage() {
         "
       >
 
+        {/* ----------------------------------- */}
         {/* PAGE HEADER */}
+        {/* ----------------------------------- */}
         <div className="
           flex
-          items-center
-          justify-between
+          flex-col
+          md:flex-row
+          md:items-center
+          md:justify-between
+          gap-4
           mb-6
         ">
 
-          <h1 className="
-            text-3xl
-            font-bold
-          ">
-            Customers
-          </h1>
+          <div>
 
-          <Link
+            <h1 className="
+              text-3xl
+              font-bold
+            ">
+              Customers
+            </h1>
 
-          to="/customers/create"
+            <p className="
+              text-gray-500
+              mt-1
+            ">
+              Manage customer accounts
+            </p>
 
-          className="
-            bg-blue-600
-            text-white
-            px-4
-            py-2
-            rounded-lg
-            hover:bg-blue-700
-            transition
-          "
-        >
+          </div>
 
-          Add Customer
 
-        </Link>
+          {/* ADD CUSTOMER BUTTON */}
+          <button
+
+            onClick={() =>
+              navigate(
+                "/customers/create"
+              )
+            }
+
+            className="
+              bg-blue-600
+              text-white
+              px-5
+              py-3
+              rounded-xl
+              hover:bg-blue-700
+              transition
+              shadow
+            "
+          >
+
+            Add Customer
+
+          </button>
 
         </div>
 
 
+        {/* ----------------------------------- */}
+        {/* SEARCH + FILTERS */}
+        {/* ----------------------------------- */}
+        <div className="
+          bg-white
+          rounded-2xl
+          shadow-md
+          p-4
+          mb-6
+        ">
+
+          <div className="
+            flex
+            flex-col
+            md:flex-row
+            gap-4
+          ">
+
+            {/* SEARCH INPUT */}
+            <input
+
+              type="text"
+
+              placeholder="
+                Search customers...
+              "
+
+              value={search}
+
+              onChange={(e) =>
+
+                setSearch(
+                  e.target.value
+                )
+              }
+
+              className="
+                border
+                border-gray-300
+                rounded-xl
+                p-3
+                flex-1
+                focus:outline-none
+                focus:ring-2
+                focus:ring-blue-500
+              "
+            />
+
+
+            {/* STATUS FILTER */}
+            <select
+
+              value={status}
+
+              onChange={(e) =>
+
+                setStatus(
+                  e.target.value
+                )
+              }
+
+              className="
+                border
+                border-gray-300
+                rounded-xl
+                p-3
+                w-full
+                md:w-64
+                focus:outline-none
+                focus:ring-2
+                focus:ring-blue-500
+              "
+            >
+
+              <option value="">
+                All Statuses
+              </option>
+
+              <option value="active">
+                Active
+              </option>
+
+              <option value="inactive">
+                Inactive
+              </option>
+
+              <option value="lead">
+                Lead
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        {/* ----------------------------------- */}
         {/* CUSTOMER TABLE */}
-        <CustomerTable
-          customers={customers}
-        />
+        {/* ----------------------------------- */}
+        <div className="
+            bg-white
+            rounded-2xl
+            shadow-md
+            overflow-hidden
+          ">
+
+            {loading ? (
+
+              <div className="
+                p-6
+                text-center
+              ">
+
+                Loading customers...
+
+              </div>
+
+            ) : (
+
+             <CustomerTable
+
+                customers={customers}
+
+                onDelete={
+                  handleDeleteCustomer
+                }
+              />
+
+            )}
+
+          </div>
 
       </motion.div>
 

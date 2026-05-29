@@ -19,6 +19,9 @@ from "../pages/AdminPage";
 import AgentPage
 from "../pages/AgentPage";
 
+import AuditLogsPage
+from "../pages/AuditLogsPage";
+
 import CustomersPage
 from "../pages/CustomersPage";
 
@@ -33,6 +36,9 @@ from "../pages/CreateCustomerPage";
 
 import CustomerDetailPage
 from "../pages/CustomerDetailPage";
+
+import EditCustomerPage
+from "../pages/EditCustomerPage";
 
 
 export default function AppRoutes() {
@@ -106,6 +112,20 @@ export default function AppRoutes() {
           }
         />
 
+        <Route
+
+          path="/customers/:id/edit"
+
+          element={
+
+            <ProtectedRoute>
+
+              <EditCustomerPage />
+
+            </ProtectedRoute>
+          }
+        />
+
 
         {/* ADMIN ROUTE */}
         <Route
@@ -119,6 +139,22 @@ export default function AppRoutes() {
             >
 
               <AdminPage />
+
+            </RoleRoute>
+          }
+        />
+
+        <Route
+
+          path="/admin/audit-logs"
+
+          element={
+
+            <RoleRoute
+              allowedRoles={["admin"]}
+            >
+
+              <AuditLogsPage />
 
             </RoleRoute>
           }

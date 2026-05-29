@@ -1,23 +1,18 @@
-import { useState } from "react";
-
-import { useNavigate }
-from "react-router-dom";
+import { useState }
+from "react";
 
 import { motion }
 from "framer-motion";
 
-import toast
-from "react-hot-toast";
 
-import {
-  createCustomer
-} from "../../services/customerService";
+export default function CustomerForm({
 
+  initialData = {},
 
-export default function CustomerForm() {
+  onSubmit,
 
-  const navigate = useNavigate();
-
+  submitText = "Save Customer",
+}) {
 
   // -----------------------------------
   // FORM STATE
@@ -25,23 +20,32 @@ export default function CustomerForm() {
   const [formData, setFormData] =
     useState({
 
-      first_name: "",
+      first_name:
+        initialData.first_name || "",
 
-      last_name: "",
+      last_name:
+        initialData.last_name || "",
 
-      email: "",
+      email:
+        initialData.email || "",
 
-      phone: "",
+      phone:
+        initialData.phone || "",
 
-      address: "",
+      address:
+        initialData.address || "",
 
-      city: "",
+      city:
+        initialData.city || "",
 
-      state: "",
+      state:
+        initialData.state || "",
 
-      zip_code: "",
+      zip_code:
+        initialData.zip_code || "",
 
-      status: "active",
+      status:
+        initialData.status || "active",
     });
 
 
@@ -58,13 +62,14 @@ export default function CustomerForm() {
 
       ...formData,
 
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.value,
     });
   };
 
 
   // -----------------------------------
-  // HANDLE FORM SUBMIT
+  // HANDLE SUBMIT
   // -----------------------------------
   const handleSubmit = async (e) => {
 
@@ -74,24 +79,7 @@ export default function CustomerForm() {
 
       setLoading(true);
 
-      await createCustomer(formData);
-
-      toast.success(
-        "Customer created successfully"
-      );
-
-      navigate("/customers");
-
-    } catch (error) {
-
-      console.error(
-        "Failed to create customer:",
-        error
-      );
-
-      toast.error(
-        "Failed to create customer"
-      );
+      await onSubmit(formData);
 
     } finally {
 
@@ -113,8 +101,8 @@ export default function CustomerForm() {
       className="
         bg-white
         rounded-2xl
-        shadow-xl
-        p-8
+        shadow-lg
+        p-6
         grid
         grid-cols-1
         md:grid-cols-2
@@ -137,7 +125,7 @@ export default function CustomerForm() {
 
         className="
           border
-          rounded-lg
+          rounded-xl
           p-3
         "
       />
@@ -158,7 +146,7 @@ export default function CustomerForm() {
 
         className="
           border
-          rounded-lg
+          rounded-xl
           p-3
         "
       />
@@ -179,7 +167,7 @@ export default function CustomerForm() {
 
         className="
           border
-          rounded-lg
+          rounded-xl
           p-3
         "
       />
@@ -200,7 +188,7 @@ export default function CustomerForm() {
 
         className="
           border
-          rounded-lg
+          rounded-xl
           p-3
         "
       />
@@ -221,7 +209,7 @@ export default function CustomerForm() {
 
         className="
           border
-          rounded-lg
+          rounded-xl
           p-3
           md:col-span-2
         "
@@ -243,7 +231,7 @@ export default function CustomerForm() {
 
         className="
           border
-          rounded-lg
+          rounded-xl
           p-3
         "
       />
@@ -264,7 +252,7 @@ export default function CustomerForm() {
 
         className="
           border
-          rounded-lg
+          rounded-xl
           p-3
         "
       />
@@ -285,7 +273,7 @@ export default function CustomerForm() {
 
         className="
           border
-          rounded-lg
+          rounded-xl
           p-3
         "
       />
@@ -302,7 +290,7 @@ export default function CustomerForm() {
 
         className="
           border
-          rounded-lg
+          rounded-xl
           p-3
         "
       >
@@ -313,6 +301,10 @@ export default function CustomerForm() {
 
         <option value="inactive">
           Inactive
+        </option>
+
+        <option value="lead">
+          Lead
         </option>
 
       </select>
@@ -328,7 +320,7 @@ export default function CustomerForm() {
         className="
           bg-blue-600
           text-white
-          rounded-lg
+          rounded-xl
           p-3
           hover:bg-blue-700
           transition
@@ -337,8 +329,8 @@ export default function CustomerForm() {
       >
 
         {loading
-          ? "Creating..."
-          : "Create Customer"}
+          ? "Saving..."
+          : submitText}
 
       </button>
 

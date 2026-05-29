@@ -24,7 +24,10 @@ from .models import (
     AuditLog
 )
 
-from .serializers import LoginSerializer
+from .serializers import LoginSerializer, AuditLogSerializer
+
+from rest_framework import generics
+from rest_framework.permissions import IsAdminUser
 
 from authentication.services.audit_service import (
     create_audit_log
@@ -362,3 +365,18 @@ class MeView(APIView):
 
             "role": user.role,
         })
+    
+
+class AuditLogListView(
+    generics.ListAPIView
+):
+
+    queryset = AuditLog.objects.all(
+
+        ).order_by("-created_at")
+
+    serializer_class = AuditLogSerializer
+
+    permission_classes = [
+        IsAdminUser
+    ]

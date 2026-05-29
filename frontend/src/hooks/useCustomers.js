@@ -3,18 +3,18 @@ import {
   useState
 } from "react";
 
-import toast from "react-hot-toast";
-
 import {
   getCustomers
 } from "../services/customerService";
 
+import toast from "react-hot-toast";
 
-// -----------------------------------
-// ENTERPRISE CUSTOMER HOOK
-// -----------------------------------
+
 export default function useCustomers() {
 
+  // -----------------------------------
+  // STATE
+  // -----------------------------------
   const [customers, setCustomers] =
     useState([]);
 
@@ -26,16 +26,65 @@ export default function useCustomers() {
 
 
   // -----------------------------------
+  // SEARCH + FILTERS
+  // -----------------------------------
+  const [search, setSearch] =
+    useState("");
+
+  const [status, setStatus] =
+    useState("");
+
+
+  // -----------------------------------
+  // DEBOUNCED SEARCH
+  // -----------------------------------
+  const [debouncedSearch,
+    setDebouncedSearch] =
+      useState("");
+
+
+  // -----------------------------------
+  // WAIT BEFORE SEARCHING
+  // -----------------------------------
+  useEffect(() => {
+
+    const timer = setTimeout(() => {
+
+      setDebouncedSearch(search);
+
+    }, 400);
+
+
+    return () => clearTimeout(timer);
+
+  }, [search]);
+
+
+  // -----------------------------------
   // FETCH CUSTOMERS
   // -----------------------------------
+  useEffect(() => {
+
+    fetchCustomers();
+
+  }, [debouncedSearch, status]);
+
+
   const fetchCustomers = async () => {
 
     try {
 
       setLoading(true);
 
+      setError(null);
+
       const data =
-        await getCustomers();
+        await getCustomers(
+
+          debouncedSearch,
+
+          status
+        );
 
       setCustomers(data);
 
@@ -48,25 +97,11 @@ export default function useCustomers() {
 
       setError(error);
 
-      toast.error(
-        "Failed to load customers."
-      );
-
     } finally {
 
       setLoading(false);
     }
   };
-
-
-  // -----------------------------------
-  // INITIAL LOAD
-  // -----------------------------------
-  useEffect(() => {
-
-    fetchCustomers();
-
-  }, []);
 
 
   return {
@@ -76,6 +111,14 @@ export default function useCustomers() {
     loading,
 
     error,
+
+    search,
+
+    setSearch,
+
+    status,
+
+    setStatus,
 
     fetchCustomers,
   };

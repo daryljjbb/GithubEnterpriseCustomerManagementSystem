@@ -1,9 +1,26 @@
 import { Link }
 from "react-router-dom";
 
+import { useState }
+from "react";
+
+import CustomerDeleteModal from "./CustomerDeleteModal";
+
+
+
+
 export default function CustomerTable({
-  customers
+
+  customers,
+
+  onDelete
 }) {
+
+  const [selectedCustomer,setSelectedCustomer] = useState(null);
+
+
+
+ 
 
   return (
 
@@ -39,6 +56,9 @@ export default function CustomerTable({
 
             <th className="p-4 text-left">
               Status
+            </th>
+            <th className="p-4 text-left">
+              Actions
             </th>
 
           </tr>
@@ -101,13 +121,54 @@ export default function CustomerTable({
                 </span>
 
               </td>
+              <td className="p-4">
+                <button
 
+                  onClick={(e) => {
+
+                    e.stopPropagation();
+
+                    setSelectedCustomer(customer);
+                  }}
+
+                  className="
+                    bg-red-500
+                    text-white
+                    px-3
+                    py-1
+                    rounded-lg
+                    text-sm
+                    hover:bg-red-600
+                  "
+                >
+                  Delete
+                </button>
+                
+              </td>
             </tr>
           ))}
 
         </tbody>
 
       </table>
+
+      {
+          selectedCustomer && (
+
+            <CustomerDeleteModal
+
+              customer={selectedCustomer}
+
+             onConfirm={() =>
+                onDelete(selectedCustomer)
+              }
+
+              onCancel={() =>
+                setSelectedCustomer(null)
+              }
+            />
+          )
+        }
 
     </div>
   );

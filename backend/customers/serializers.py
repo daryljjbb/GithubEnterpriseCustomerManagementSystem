@@ -24,7 +24,30 @@ class CustomerSerializer(
             "updated_at",
         ]
 
+     # -----------------------------------
+    # VALIDATE EMAIL
+    # -----------------------------------
+    def validate_email(self, value):
 
+        customer = Customer.objects.filter(
+                email=value
+            )
+
+        # Ignore current instance during edit
+        if self.instance:
+
+            customer = customer.exclude(
+                        id=self.instance.id
+                    )
+
+        if customer.exists():
+
+            raise serializers.ValidationError(
+
+                "Customer email already exists."
+            )
+
+        return value    
     # -----------------------------------
     # VALIDATE PHONE
     # -----------------------------------
@@ -38,3 +61,5 @@ class CustomerSerializer(
             )
 
         return value
+    
+    

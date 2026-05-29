@@ -17,6 +17,17 @@ import {
   getCustomer
 } from "../services/customerService";
 
+import { Link }
+from "react-router-dom";
+
+import {
+  deleteCustomer
+} from "../services/customerService";
+
+import {
+  useNavigate
+} from "react-router-dom";
+
 
 export default function CustomerDetailPage() {
 
@@ -27,6 +38,8 @@ export default function CustomerDetailPage() {
 
   const [loading, setLoading] =
     useState(true);
+
+  const navigate = useNavigate();
 
 
   // -----------------------------------
@@ -64,6 +77,39 @@ export default function CustomerDetailPage() {
     } finally {
 
       setLoading(false);
+    }
+  };
+
+  const handleDeleteCustomer =
+  async () => {
+
+    const confirmed =
+      window.confirm(
+
+        "Delete this customer?"
+      );
+
+    if (!confirmed) return;
+
+    try {
+
+      await deleteCustomer(
+        customer.id
+      );
+
+      toast.success(
+        "Customer deleted"
+      );
+
+      navigate("/customers");
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error(
+        "Failed to delete customer"
+      );
     }
   };
 
@@ -168,6 +214,24 @@ export default function CustomerDetailPage() {
             </p>
 
           </div>
+          <Link
+
+                to={`/customers/${customer.id}/edit`}
+
+                className="
+                    bg-yellow-500
+                    text-white
+                    px-4
+                    py-2
+                    rounded-lg
+                    hover:bg-yellow-600
+                    transition
+                "
+                >
+
+                Edit Customer
+
+         </Link>
 
         </div>
 

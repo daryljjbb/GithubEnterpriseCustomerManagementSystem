@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate
 
 from rest_framework import serializers
 
+from authentication.models import AuditLog
+
 
 class LoginSerializer(serializers.Serializer):
 
@@ -42,3 +44,31 @@ class LoginSerializer(serializers.Serializer):
         attrs["user"] = user
 
         return attrs
+    
+class AuditLogSerializer(
+    serializers.ModelSerializer
+):
+
+    username = serializers.CharField(
+
+            source="user.username",
+
+            read_only=True
+        )
+
+    class Meta:
+
+        model = AuditLog
+
+        fields = [
+
+            "id",
+
+            "event",
+
+            "username",
+
+            "ip_address",
+
+            "created_at",
+        ]

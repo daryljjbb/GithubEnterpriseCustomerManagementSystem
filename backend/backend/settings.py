@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework', #Put this after you install Django Rest Framework
     'rest_framework_simplejwt',
     'corsheaders', #Put this after you install Django Cors-headers
+    'django_filters', #Put this after you install Django Filter
 ]
 
 MIDDLEWARE = [

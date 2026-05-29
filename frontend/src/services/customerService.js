@@ -4,11 +4,27 @@ import axiosClient from "../lib/axiosClient";
 // -----------------------------------
 // GET ALL CUSTOMERS
 // -----------------------------------
-export const getCustomers = async () => {
+export const getCustomers = async (
+
+  search = "",
+
+  status = ""
+
+) => {
 
   const response =
     await axiosClient.get(
-      "/customers/"
+
+      "/customers/",
+
+      {
+        params: {
+
+          search,
+
+          status,
+        },
+      }
     );
 
   return response.data;

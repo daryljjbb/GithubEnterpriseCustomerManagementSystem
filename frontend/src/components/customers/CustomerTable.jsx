@@ -1,3 +1,6 @@
+import { Link }
+from "react-router-dom";
+
 export default function CustomerTable({
   customers
 }) {
@@ -52,10 +55,17 @@ export default function CustomerTable({
 
               key={customer.id}
 
+              onClick={() =>
+
+                window.location.href =
+                  `/customers/${customer.id}`
+              }
+
               className="
                 border-t
                 hover:bg-gray-50
                 transition
+                cursor-pointer
               "
             >
 

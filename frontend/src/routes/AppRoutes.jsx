@@ -31,6 +31,9 @@ from "./RoleRoute";
 import CreateCustomerPage
 from "../pages/CreateCustomerPage";
 
+import CustomerDetailPage
+from "../pages/CustomerDetailPage";
+
 
 export default function AppRoutes() {
 
@@ -84,6 +87,20 @@ export default function AppRoutes() {
             <ProtectedRoute>
 
               <CreateCustomerPage />
+
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+
+          path="/customers/:id"
+
+          element={
+
+            <ProtectedRoute>
+
+              <CustomerDetailPage />
 
             </ProtectedRoute>
           }
